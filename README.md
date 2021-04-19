@@ -557,4 +557,77 @@ cfbc181a40a7   ashupython:v1   "python3 /pycode/whi…"   10 seconds ago   Up 8 
  
  <img src="webserver.png">
  
+ ## building webapp docker. image
  
+ ```
+ ❯ ls
+CODE_OF_CONDUCT.md README.md          index.html         styles
+LICENSE            images             nginx.dockerfile
+❯ docker  build  -t   ashunginx:v1  .
+unable to prepare context: unable to evaluate symlinks in Dockerfile path: lstat /Users/fire/Desktop/mydocker/beginner-html-site-styled/Dockerfile: no such file or directory
+❯ 
+❯ docker  build  -t   ashunginx:v1 -f  nginx.dockerfile   .
+Sending build context to Docker daemon  63.49kB
+Step 1/3 : FROM  nginx
+latest: Pulling from library/nginx
+f7ec5a41d630: Pull complete 
+aa1efa14b3bf: Pull complete 
+b78b95af9b17: Pull complete 
+c7d6bca2b8dc: Pull complete 
+cf16cd8e71e0: Pull complete 
+0241c68333ef: Pull complete 
+Digest: sha256:75a55d33ecc73c2a242450a9f1cc858499d468f077ea942867e662c247b5e412
+Status: Downloaded newer image for nginx:latest
+ ---> 62d49f9bab67
+Step 2/3 : MAINTAINER  ashutoshh@Linux.com , 9509957594
+ ---> Running in 40bc0499c8ea
+Removing intermediate container 40bc0499c8ea
+ ---> 6f085fca17b8
+Step 3/3 : COPY .  /usr/share/nginx/html/
+ ---> 6f52fa9d7f4e
+Successfully built 6f52fa9d7f4e
+Successfully tagged ashunginx:v1
+
+```
+
+## launching webapp container 
+
+```
+ docker  run  --name ashucx1  -d  -p  1133:80    ashunginx:v1
+
+```
+
+# image registry in docker 
+
+<img src="imgreg.png">
+
+## image name reality 
+
+<img src="imgname.png">
+
+## steps to push docker image on docker hub 
+
+```
+❯ docker   tag   ashunginx:v1      dockerashu/ashunginx:v1
+❯ 
+❯ docker  login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: dockerashu
+Password: 
+Login Succeeded
+❯ docker  push  dockerashu/ashunginx:v1
+The push refers to repository [docker.io/dockerashu/ashunginx]
+f12b5ed3200a: Pushed 
+64ee8c6d0de0: Mounted from library/nginx 
+974e9faf62f1: Mounted from library/nginx 
+15aac1be5f02: Mounted from library/nginx 
+23c959acc3d0: Mounted from library/nginx 
+4dc529e519c4: Mounted from library/nginx 
+7e718b9c0c8c: Mounted from library/nginx 
+v1: digest: sha256:c945f80d15d8f9acdd2162907b83bfb18a18471e2acd3230662ba43379af53ed size: 1779
+❯ docker  logout
+Removing login credentials for https://index.docker.io/v1/
+
+```
+
+

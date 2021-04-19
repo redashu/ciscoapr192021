@@ -14,6 +14,20 @@
 
 <img src="virt.png">
 
+## Problem with VM's
+
+<img src="vmprob.png">
+
+# COntainers all the way 
+
+<img src="cont.png">
+
+# Introdution to cRE
+
+<img src="cre.png">
+
+
+
 
 
 

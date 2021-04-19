@@ -1,3 +1,2 @@
-# Training plan 
+# Docker COntainer getting started. 
 
-<img src="plan.png">

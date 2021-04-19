@@ -112,7 +112,9 @@ tcp6       0      0 :::2375                 :::*                    LISTEN      
 ```
 
 
+# Docker Desktop explanation 
 
+<img src="dd.png">
 
 
 

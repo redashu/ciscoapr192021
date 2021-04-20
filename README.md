@@ -534,6 +534,14 @@ CoreDNS is running at https://54.227.223.108:6443/api/v1/namespaces/kube-system/
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 
 ```
+## Docker image will be deployed as Pod 
+
+<img src="podvscont.png">
+
+## Pod Designig 
+
+<img src="pod-design.png">
+
 
 
 

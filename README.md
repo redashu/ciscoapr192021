@@ -542,6 +542,24 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 
 <img src="pod-design.png">
 
+```
+
+❯ kubectl  apply  -f  ashupod1.yaml
+pod/ashupod-1 created
+❯ kubectl  get  pods
+NAME        READY   STATUS    RESTARTS   AGE
+ashupod-1   1/1     Running   0          15s
+x1          1/1     Running   2          8h
+❯ kubectl  get  pods
+NAME         READY   STATUS             RESTARTS   AGE
+ashupod-1    1/1     Running            0          5m15s
+saipod-1     0/1     ImagePullBackOff   0          4m3s
+srirpod-1    1/1     Running            0          4m32s
+theeppod-1   0/1     InvalidImageName   0          5s
+x1           1/1     Running            3          8h
+
+
+```
 
 
 

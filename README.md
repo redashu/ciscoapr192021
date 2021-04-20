@@ -256,6 +256,12 @@ round-trip min/avg/max = 0.109/0.114/0.121 ms
 ```
 ## accessing application from external users 
 
+## COncept 
+
+<img src="portcon.png">
+
+
+
 # POrt forwarding 
 
 <img src="portf.png">

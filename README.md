@@ -397,5 +397,50 @@ docker run -it --name x1 --mount type=bind,source=/etc,target=/app alpine sh
 
 ```
 
+# COmmon issues while deploying containers in production environment 
+
+<img src="prod.png">
+
+## container orchestration tech 
+
+<img src="corch.png">
+
+## info about kubernetes 
+
+<img src="k8sinfo.png">
+
+# Exploring k8s architecutre 
+
+## demo 1 
+<img src="ks8ar1.png">
+
+
+## kube-apiserver 
+
+<img src="kubeapi.png">
+
+## kube-schedular 
+
+<img src="kubesch.png">
+
+## kube-controller-manager 
+
+### it hold so many components
+
+<img src="kch.png">
+
+## node controller 
+
+<img src="nodec.png">
+
+## replication controller 
+
+<img src="rc.png">
+
+## ETCD -- the brain of k8s 
+
+<img src="etcd.png">
+
+
 
 

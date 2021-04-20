@@ -254,5 +254,11 @@ PING ashuc3 (192.168.100.23): 56 data bytes
 round-trip min/avg/max = 0.109/0.114/0.121 ms
 
 ```
+## accessing application from external users 
+
+# POrt forwarding 
+
+<img src="portf.png">
+
 
 

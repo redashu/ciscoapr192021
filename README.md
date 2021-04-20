@@ -267,4 +267,135 @@ round-trip min/avg/max = 0.109/0.114/0.121 ms
 <img src="portf.png">
 
 
+# Storage in Docker 
+
+## storage options 
+
+<img src="st.png">
+
+## storage for container 
+
+<img src="volumes.png">
+
+## showing data lost process
+
+```
+❯ docker  run -it  --name x1  alpine sh
+/ # 
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # mkdir  hello world
+/ # ls
+bin    etc    home   media  opt    root   sbin   sys    usr    world
+dev    hello  lib    mnt    proc   run    srv    tmp    var
+/ # exit
+❯ docker  rm x1
+x1
+
+```
+
+## lets play with docker volume 
+
+```
+❯ docker  volume  create  ashuvol1
+ashuvol1
+❯ docker  volume  ls
+DRIVER    VOLUME NAME
+local     ashuvol1
+local     devav1
+❯ docker  volume  inspect  ashuvol1
+[
+    {
+        "CreatedAt": "2021-04-20T07:32:54Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/ashuvol1/_data",
+        "Name": "ashuvol1",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+```
+
+## launching container with volume 
+
+<img src="lv.png">
+
+## demo 
+
+```
+❯ docker  run  -it --name ashuc1  -v  ashuvol1:/mydata:rw  alpine  sh
+/ # 
+/ # 
+/ # ls
+bin     etc     lib     mnt     opt     root    sbin    sys     usr
+dev     home    media   mydata  proc    run     srv     tmp     var
+/ # cd  /mydata/
+/mydata # ls
+/mydata # mkdir hello world 
+/mydata # ls
+hello  world
+/mydata # exit
+❯ docker rm  ashuc1
+ashuc1
+❯ docker  volume  ls
+DRIVER    VOLUME NAME
+local     anwevol1
+local     ashuvol1
+
+```
+
+## checking data of volume from engine machine 
+
+```
+[root@ip-172-31-71-211 ~]# cd /var/lib/docker/
+[root@ip-172-31-71-211 docker]# ls
+builder  buildkit  containers  image  network  overlay2  plugins  runtimes  swarm  tmp  trust  volumes
+[root@ip-172-31-71-211 docker]# cd  volumes/
+[root@ip-172-31-71-211 volumes]# ls
+anwevol1  ashuvol1  devav1  geethav1  gobivol1  metadata.db  saiv1  samith1  sebvol1  srirVOL1  swarvol  swarvol1  theepvol1
+[root@ip-172-31-71-211 volumes]# cd  ashuvol1/
+[root@ip-172-31-71-211 ashuvol1]# ls
+_data
+[root@ip-172-31-71-211 ashuvol1]# cd _data/
+[root@ip-172-31-71-211 _data]# ls
+hello  world
+
+```
+## access data of volume from another container 
+
+```
+❯ docker  run -it --name testashuc1  -v  ashuvol1:/okdata:ro  centos  bash
+[root@4c122056cc5a /]# cd  /okdata/
+[root@4c122056cc5a okdata]# ls
+hello  world
+[root@4c122056cc5a okdata]# rmdir hello 
+rmdir: failed to remove 'hello': Read-only file system
+
+```
+
+
+## container with multiple volumes 
+
+```
+❯ docker  run -it --name testashuc1  -v  ashuvol1:/okdata:ro -v  ashuvol2:/oo:rw  centos  bash
+[root@9ac6bcfcb281 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  okdata  oo  opt  proc	root  run  sbin  srv  sys  tmp	usr  var
+[root@9ac6bcfcb281 /]# 
+
+```
+
+## bind mounts 
+
+```
+docker  run -it --name ashuxc1  -v  /etc:/myetc:ro   alpine sh 
+
+--
+
+docker run -it --name x1 --mount type=bind,source=/etc,target=/app alpine sh
+
+```
+
+
 

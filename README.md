@@ -442,5 +442,98 @@ docker run -it --name x1 --mount type=bind,source=/etc,target=/app alpine sh
 <img src="etcd.png">
 
 
+## Networking for containers in k8s 
+
+<img src="k8snet.png">
+
+## minion node side -- CNI + kube-proxy 
+
+<img src="kube-proxy.png">
+
+
+# Kubernetes client installation 
+
+## mac 
+
+```
+❯ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   154  100   154    0     0    364      0 --:--:-- --:--:-- --:--:--   364
+100 51.9M  100 51.9M    0     0  5661k      0  0:00:09  0:00:09 --:--:-- 6340k
+❯ ls
+Applications          Library               VirtualBox VMs        javawebapp            powerlevel10k
+Creative Cloud Files  Movies                accc.yml              kubectl
+Desktop               Music                 access.yml            macos-terminal-themes
+Documents             Pictures              awscli-bundle         minikube-darwin-amd64
+Downloads             Public                go                    myconfig
+❯ sudo mv -v  kubectl  /usr/local/bin/
+Password:
+kubectl -> /usr/local/bin/kubectl
+❯ sudo chmod +x  /usr/local/bin/kubectl
+❯ kubectl  version  --client
+Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"darwin/amd64"}
+
+
+```
+
+## Download token file from k8s master node 
+
+### location of token file 
+
+```
+[root@ip-172-31-69-220 ~]# cd  /etc/kubernetes/
+[root@ip-172-31-69-220 kubernetes]# ls
+admin.conf  controller-manager.conf  kubelet.conf  manifests  pki  scheduler.conf
+[root@ip-172-31-69-220 kubernetes]# cat  admin.conf 
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EUXhOekUxTXpreU1sb1hEVE14TURReE5URTFNemt5TWxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTU8rCkc5OGNTdy9GZHRHUEsxeU9NK0tuZ3lGb3lXYkJGMWM5V2VEOXhrWTc1RUFwd21ZV3ZJbFpIQmtjUVQ5UGhvYkUKK2NDOUNBRDNMSHBhbEdBVS9DMWNnYWhIaHlGWUkyM0gwSllLbVRLdXNsZGRBT0ZEK0x3d210cEkxbXJCVEhCbgo1ZEYxOG8vMnVzaHZMWnIzc3RyOERzTldab1ZoMlpBcHlzeWlhUGRoa2tZUkJSZTA1cFFNQjhFb1N3a0R6MHZBClR4YVVhNXQ1ZnNncDFZSGNNWnlpQTlRdDVsTERxNmhLbDhHd2RiQ2JKS1FhWXZEeHdUUl
+    
+  ```
+  
+### download it 
+
+## checking its connection 
+
+```
+❯ kubectl   cluster-info   --kubeconfig  admin.conf
+Kubernetes control plane is running at https://54.227.223.108:6443
+CoreDNS is running at https://54.227.223.108:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+❯ kubectl   get  nodes    --kubeconfig  admin.conf
+NAME                            STATUS   ROLES                  AGE     VERSION
+ip-172-31-69-220.ec2.internal   Ready    control-plane,master   2d19h   v1.21.0
+ip-172-31-70-124.ec2.internal   Ready    <none>                 2d19h   v1.21.0
+ip-172-31-75-3.ec2.internal     Ready    <none>                 2d19h   v1.21.0
+
+
+```
+
+## setting admin.conf permanently 
+
+```
+❯ cp -v  ~/Desktop/admin.conf  ~/.kube/config
+/Users/fire/Desktop/admin.conf -> /Users/fire/.kube/config
+❯ cd
+❯ 
+❯ kubectl   get  nodes
+NAME                            STATUS   ROLES                  AGE     VERSION
+ip-172-31-69-220.ec2.internal   Ready    control-plane,master   2d19h   v1.21.0
+ip-172-31-70-124.ec2.internal   Ready    <none>                 2d19h   v1.21.0
+ip-172-31-75-3.ec2.internal     Ready    <none>                 2d19h   v1.21.0
+❯ kubectl   version
+Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:25:06Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"linux/amd64"}
+❯ kubectl  cluster-info
+Kubernetes control plane is running at https://54.227.223.108:6443
+CoreDNS is running at https://54.227.223.108:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+```
+
 
 

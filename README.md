@@ -1,3 +1,6 @@
-# Training plan 
+# day 1 recap 
 
-<img src="plan.png">
+## different docker client options 
+
+
+<img src="docker_clients.png">

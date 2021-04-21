@@ -254,6 +254,182 @@ gobipod123    1/1     Running   0          39m    run=gobipod123
 
 ```
 
+## service in one glance 
+
+<img src="service.png">
+
+## type of service 
+
+<img src="stype.png">
+
+## nodeport service 
+
+<img src="np.png">
+
+## creating nodeport service 
+
+<img src="npcr.png">
+
+```
+❯ kubectl   create   service   nodeport  ashus1  --tcp  1234:80  --dry-run=client  -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashus1
+  name: ashus1
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: ashus1
+  type: NodePort
+status:
+  loadBalancer: {}
+❯ kubectl   create   service   nodeport  ashus1  --tcp  1234:80  --dry-run=client  -o yaml   >ashunodeport.yaml
+
+```
+
+## understanding selector in nodeport service
+
+<img src="sel.png">
+
+## deploying nodeport service 
+
+<img src="npdep.png">
+
+## checking service  short form 
+
+```
+❯ kubectl   get   svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+anwes1       NodePort    10.105.101.194   <none>        1234:31085/TCP   118m
+ashus1       NodePort    10.97.215.220    <none>        1234:32397/TCP   119m
+devas1       NodePort    10.97.40.11      <none>        1234:31248/TCP   111m
+geetha1      NodePort    10.105.113.74    <none>        1234:30106/TCP   104m
+gobis1       NodePort    10.99.200.67     <none>        1234:32394/TCP   111m
+
+```
+
+## deleting pod & service 
+
+```
+❯ kubectl delete pod ashupod123
+pod "ashupod123" deleted
+❯ kubectl delete service  ashus1
+service "ashus1" deleted
+
+```
+
+## deleting pod and service 
+
+```
+❯ kubectl  delete all --all
+pod "anwepod123" deleted
+pod "ashupod123" deleted
+pod "devupod123" deleted
+pod "geethapod2" deleted
+pod "gobipod123" deleted
+pod "nrupanag" deleted
+pod "pox1" deleted
+pod "pox2" deleted
+pod "pox3" deleted
+pod "pox4" deleted
+pod "pox5" deleted
+pod "pracpod123" deleted
+pod "saipod123" deleted
+pod "sampod123" deleted
+pod "sebpod123" deleted
+pod "srirpod123" deleted
+pod "swarnapod1" deleted
+pod "theeppod123" deleted
+service "anwes1" deleted
+service "ashus1" deleted
+service "devas1" deleted
+service "geetha1" deleted
+service "gobis1" deleted
+service "kubernetes" deleted
+
+```
+
+## alpine pod 
+
+```
+10082  kubectl   run    ashupodx1  --image=alpine  --dry-run=client -o yaml 
+10083  kubectl   run    ashupodx1  --image=alpine  --dry-run=client -o json 
+❯ 
+❯ 
+❯ kubectl   run    ashupodx1  --image=alpine  --dry-run=client -o yaml >alp.yaml
+
+```
+
+## Best practise to deploy any application in k8s 
+
+<img src="appdep.png">
+
+# creating deployment 
+
+```
+❯ kubectl  create  deployment  ashudep1  --image=dockerashu/ashuciscowebapp:v001  --dry-run=client -o yaml  >ashudep.yml
+❯ kubectl   create  service nodeport   ashusvc2  --tcp  2233:80  --dry-run=client -o yaml   >>ashudep.yml
+
+```
+
+## under deployment the section that will be used for pod creation purpose 
+
+<img src="deppod.png">
+
+## deployment of deployment and services
+
+```
+❯ kubectl  apply  -f   ashudep.yml
+deployment.apps/ashudep1 created
+service/ashusvc2 created
+❯ kubectl   get  deployment
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1         1/1     1            1           14s
+pracdep1         1/1     1            1           9s
+saidep1          1/1     1            1           4s
+sebdep1          1/1     1            1           6s
+swardeploymet1   1/1     1            1           47s
+❯ kubectl   get  deploy
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+ashudep1         1/1     1            1           18s
+pracdep1         1/1     1            1           13s
+saidep1          1/1     1            1           8s
+sebdep1          1/1     1            1           10s
+srirdeplyment1   1/1     1            1           4s
+swardeploymet1   1/1     1            1           51s
+❯ kubectl   get  svc
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ashusvc2         NodePort    10.102.160.255   <none>        2233:30454/TCP   27s
+geethssvc2       NodePort    10.110.165.188   <none>        2233:30644/TCP   10s
+kubernetes       ClusterIP   10.96.0.1        <none>        443/TCP          14m
+pracsvc2         NodePort    10.103.130.131   <none>        2233:31685/TCP   21s
+saisv2           NodePort    10.101.29.217    <none>        2233:31165/TCP   17s
+sebsvc2          NodePort    10.98.77.185     <none>        2233:31116/TCP   18s
+srirsrv1         NodePort    10.104.176.69    <none>        2222:31066/TCP   10s
+swarnanodeport   NodePort    10.97.132.242    <none>        2233:32227/TCP   59s
+
+```
+
+## scaling pod with yaml file 
+
+<img sr="scale.png">
+
+## upgrade app version 
+
+```
+10133  docker  build  -t  dockerashu/ashuciscowebapp:v002  .
+10134  docker login 
+10135  docker push dockerashu/ashuciscowebapp:v002 
+10136  docker  logout 
+
+```
 
 
 

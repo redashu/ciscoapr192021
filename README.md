@@ -431,6 +431,38 @@ swarnanodeport   NodePort    10.97.132.242    <none>        2233:32227/TCP   59s
 
 ```
 
+# k8s cluster setup 
+
+<img src="k8s_setup.png">
+
+## all type of k8s cluster setup 
+
+<img src="alltype.png">
+
+## context idea in K8s 
+
+```
+❯ kubectl   get  nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   42d   v1.20.2
+❯ kubectl  config get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+          kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   
+*         minikube                      minikube     minikube           default
+❯ kubectl   config  use-context  kubernetes-admin@kubernetes
+Switched to context "kubernetes-admin@kubernetes".
+❯ kubectl  config get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   
+          minikube                      minikube     minikube           default
+❯ kubectl   get  nodes
+NAME                            STATUS   ROLES                  AGE     VERSION
+ip-172-31-69-220.ec2.internal   Ready    control-plane,master   3d20h   v1.21.0
+ip-172-31-70-124.ec2.internal   Ready    <none>                 3d20h   v1.21.0
+ip-172-31-75-3.ec2.internal     Ready    <none>                 3d20h   v1.21.0
+
+```
+
 
 
 

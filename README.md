@@ -2,3 +2,131 @@
 
 <img src="recap.png">
 
+# step by step webapplication deployment in k8s
+
+## step 1 building webapp with apache httpd selection 
+
+<img src="webapp.png">
+
+## step 2 designing dockerfile 
+
+```
+❯ cd  Desktop/mydocker/day3webapp
+❯ ls
+Dockerfile ashu.html  k8s.png
+❯ docker  context  ls
+NAME                TYPE                DESCRIPTION                               DOCKER ENDPOINT               KUBERNETES ENDPOINT                     ORCHESTRATOR
+ashuawsDE1 *        moby                                                          tcp://34.193.110.49:2375                                              
+default             moby                Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   https://54.227.223.108:6443 (default)   swarm
+❯ docker  build  -t  dockerashu/ashuciscowebapp:v001  .
+Sending build context to Docker daemon  134.1kB
+Step 1/7 : FROM centos
+ ---> 300e315adb2f
+Step 2/7 : MAINTAINER  ashutoshh@linux.com
+ ---> Using cache
+ ---> 39c5c00ce2f2
+Step 3/7 : RUN yum install httpd -y
+ ---> Running in 46a37b53299f
+CentOS Linux 8 - AppStream                       16 MB/s | 6.3 MB     00:00    
+CentOS Linux 8 - BaseOS                         9.0 MB/s | 2.3 MB     00:00    
+CentOS Linux 8 - Extras                          48 kB/s | 9.6 kB     00:00    
+Dependencies resolved.
+================================================================================
+ Package           Arch   Version                               Repo       Size
+================================================================================
+Installing:
+ httpd             x86_64 2.4.37-30.module_el8.3.0+561+97fdbbcc appstream 1.7 M
+Installing dependencies:
+ apr               x86_64 1.6.3-11.el8                          appstream 125 k
+ apr-util          x86_64 1.6.1-6.el8                           appstream 105 k
+ brotli            x86_64 1.0.6-2.el8                           baseos    322 k
+ centos-logos-httpd
+                   noarch 80.5-2.el8                            baseos     24 k
+ httpd-filesystem  noarch 2.4.37-30.module_el8.3.0+561+97fdbbcc appstream  37 k
+ httpd-tools       x86_64 2.4.37-30.module_el8.3.0+561+97fdbbcc appstream 104 k
+ mailcap           noarch 2.1.48-3.el8                          baseos     39 k
+ mod_http2         x86_64 1.15.7-2.module_el8.3.0+477+498bb568  appstream 154 k
+Installing weak dependencies:
+ apr-util-bdb      x86_64 1.6.1-6.el8                           appstream  25 k
+ apr-util-openssl  x86_64 1.6.1-6.el8                           appstream  27 k
+Enabling module streams:
+ httpd                    2.4                                                  
+
+Transaction Summary
+================================================================================
+Install  11 Packages
+
+Total download size: 2.6 M
+Installed size: 7.5 M
+Downloading Packages:
+(1/11): apr-util-1.6.1-6.el8.x86_64.rpm         7.0 MB/s | 105 kB     00:00    
+(2/11): apr-util-bdb-1.6.1-6.el8.x86_64.rpm     1.5 MB/s |  25 kB     00:00    
+(3/11): apr-1.6.3-11.el8.x86_64.rpm             6.7 MB/s | 125 kB     00:00    
+(4/11): apr-util-openssl-1.6.1-6.el8.x86_64.rpm 7.7 MB/s |  27 kB     00:00    
+(5/11): httpd-filesystem-2.4.37-30.module_el8.3 8.0 MB/s |  37 kB     00:00    
+(6/11): mod_http2-1.15.7-2.module_el8.3.0+477+4  22 MB/s | 154 kB     00:00    
+(7/11): httpd-tools-2.4.37-30.module_el8.3.0+56 9.4 MB/s | 104 kB     00:00    
+(8/11): centos-logos-httpd-80.5-2.el8.noarch.rp 6.4 MB/s |  24 kB     00:00    
+(9/11): brotli-1.0.6-2.el8.x86_64.rpm            29 MB/s | 322 kB     00:00    
+(10/11): mailcap-2.1.48-3.el8.noarch.rpm        5.8 MB/s |  39 kB     00:00    
+(11/11): httpd-2.4.37-30.module_el8.3.0+561+97f  42 MB/s | 1.7 MB     00:00    
+--------------------------------------------------------------------------------
+Total                                            15 MB/s | 2.6 MB     00:00     
+warning: /var/cache/dnf/appstream-02e86d1c976ab532/packages/apr-1.6.3-11.el8.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID 8483c65d: NOKEY
+CentOS Linux 8 - AppStream                      1.6 MB/s | 1.6 kB     00:00    
+Importing GPG key 0x8483C65D:
+ Userid     : "CentOS (CentOS Official Signing Key) <security@centos.org>"
+ Fingerprint: 99DB 70FA E1D7 CE22 7FB6 4882 05B5 55B3 8483 C65D
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                        1/1 
+  Installing       : apr-1.6.3-11.el8.x86_64                               1/11 
+  Running scriptlet: apr-1.6.3-11.el8.x86_64                               1/11 
+  Installing       : apr-util-bdb-1.6.1-6.el8.x86_64                       2/11 
+  Installing       : apr-util-openssl-1.6.1-6.el8.x86_64                   3/11 
+  Installing       : apr-util-1.6.1-6.el8.x86_64                           4/11 
+  Running scriptlet: apr-util-1.6.1-6.el8.x86_64                           4/11 
+  Installing       : httpd-tools-2.4.37-30.module_el8.3.0+561+97fdbbcc.    5/11 
+  Installing       : mailcap-2.1.48-3.el8.noarch                           6/11 
+  Installing       : centos-logos-httpd-80.5-2.el8.noarch                  7/11 
+  Installing       : brotli-1.0.6-2.el8.x86_64                             8/11 
+  Running scriptlet: httpd-filesystem-2.4.37-30.module_el8.3.0+561+97fd    9/11 
+  Installing       : httpd-filesystem-2.4.37-30.module_el8.3.0+561+97fd    9/11 
+  Installing       : mod_http2-1.15.7-2.module_el8.3.0+477+498bb568.x86   10/11 
+  Installing       : httpd-2.4.37-30.module_el8.3.0+561+97fdbbcc.x86_64   11/11 
+  Running scriptlet: httpd-2.4.37-30.module_el8.3.0+561+97fdbbcc.x86_64   11/11 
+  Verifying        : apr-1.6.3-11.el8.x86_64                               1/11 
+  Verifying        : apr-util-1.6.1-6.el8.x86_64                           2/11 
+  Verifying        : apr-util-bdb-1.6.1-6.el8.x86_64                       3/11 
+  Verifying        : apr-util-openssl-1
+  
+  ```
+  
+  
+  ## step 3 pushing image to docker hub 
+  
+  ```
+  ❯ docker  login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: dockerashu
+Password: 
+Login Succeeded
+❯ docker  push  dockerashu/ashuciscowebapp:v001
+The push refers to repository [docker.io/dockerashu/ashuciscowebapp]
+facce407b7a4: Pushed 
+234e1c677ebf: Pushed 
+60aea6bbe6c5: Pushed 
+2653d992f4ef: Mounted from library/centos 
+v001: digest: sha256:ebe6468ef5dbea83e57131b5db926d017ebc5c527e0b9582dc5eb7bf51321ad8 size: 1158
+❯ docker  logout
+Removing login credentials for https://index.docker.io/v1/
+
+```
+
+
+

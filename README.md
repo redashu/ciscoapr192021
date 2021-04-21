@@ -128,5 +128,133 @@ Removing login credentials for https://index.docker.io/v1/
 
 ```
 
+## creating pod yaml file automatically 
+
+<img src="podcreate.png">
+
+## storing yaml in file 
+
+```
+❯ kubectl   run   ashupod123  --image=dockerashu/ashuciscowebapp:v001  --port 80  --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod123
+  name: ashupod123
+spec:
+  containers:
+  - image: dockerashu/ashuciscowebapp:v001
+    name: ashupod123
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+❯ kubectl   run   ashupod123  --image=dockerashu/ashuciscowebapp:v001  --port 80  --dry-run=client -o yaml  >webapp.yml
+
+```
+
+## Deployment of yaml file in k8s 
+
+```
+ kubectl  apply -f  webapp.yml
+pod/ashupod123 created
+❯ kubectl   get   pods
+NAME         READY   STATUS    RESTARTS   AGE
+anwepod123   1/1     Running   0          3s
+ashupod123   1/1     Running   0          12s
+pox1         1/1     Running   0          130m
+
+```
+
+## pod as written as 
+
+```
+4  kubectl   get   pods
+10025  kubectl   get   po
+10026  kubectl   get   pod
+
+```
+
+## checking where pod got schedule by kube-schedular 
+
+```
+❯ kubectl   get   po   ashupod123   -o wide
+NAME         READY   STATUS    RESTARTS   AGE     IP               NODE                          NOMINATED NODE   READINESS GATES
+ashupod123   1/1     Running   0          3m58s   192.168.40.146   ip-172-31-75-3.ec2.internal   <none>           <none>
+
+```
+
+## checking all pod details 
+
+```
+ kubectl   get   po      -o wide
+NAME          READY   STATUS    RESTARTS   AGE     IP               NODE                            NOMINATED NODE   READINESS GATES
+anwepod123    1/1     Running   0          5m17s   192.168.40.147   ip-172-31-75-3.ec2.internal     <none>           <none>
+ashupod123    1/1     Running   0          5m26s   192.168.40.146   ip-172-31-75-3.ec2.internal     <none>           <none>
+devupod123    1/1     Running   0          5m4s    192.168.40.149   ip-172-31-75-3.ec2.internal     <none>           <none>
+geethapod2    1/1     Running   0          5m11s   192.168.194.21   ip-172-31-70-124.ec2.internal   <none>           <none>
+gobipod123    1/1     Running   0          4m2s    192.168.194.24   ip-172-31-70-124.ec2.internal   <none>           <none>
+nrupanag      1/1     Running   0          4m30s   192.168.40.151   ip-172-31-75-3.ec2.internal     <none>           <none>
+pox1          1/1     Running   0          135m    192.168.194.17   ip-172-31-70-124.ec2.intern
+
+```
+
+## container info and so much other details you can check in pod 
+
+```
+❯ kubectl   describe  pod  ashupod123
+Name:         ashupod123
+Namespace:    default
+Priority:     0
+Node:         ip-172-31-75-3.ec2.internal/172.31.75.3
+Start Time:   Wed, 21 Apr 2021 11:21:44 +0530
+Labels:       run=ashupod123
+Annotations:  cni.projectcalico.org/podIP: 192.168.40.146/32
+              cni.projectcalico.org/podIPs: 192.168.40.146/32
+Status:       Running
+IP:           192.168.40.146
+IPs:
+  IP:  192.168.40.146
+Containers:
+  ashupod123:
+    Container ID:   docker://06ae6f453cc6500369379d1aa5191209d8706d7e75765ad87efb5438e027a39f
+    Image:          dockerashu/ashuciscowebapp:v001
+    Image ID:       docker-pullable://dockerashu/ashuciscowebapp@sha256:ebe6468ef5dbea83e57131b5db926d017ebc5c527e0b9582dc5eb7bf51321ad8
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 21 Apr 2021 11:21:53 +0530
+    Ready:          True
+
+
+```
+
+# Introduction to service in k8s for POD networking 
+
+<img src="service.png">
+
+### service will use label of pod to find pod info 
+## checking label of pods 
+
+```
+❯ kubectl  get  po   ashupod123  --show-labels
+NAME         READY   STATUS    RESTARTS   AGE   LABELS
+ashupod123   1/1     Running   1          40m   run=ashupod123
+❯ kubectl  get  po   --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+anwepod123    1/1     Running   0          40m    run=anwepod123
+ashupod123    1/1     Running   1          41m    run=ashupod123
+devupod123    1/1     Running   0          40m    run=devupod123
+geethapod2    1/1     Running   0          40m    run=geethapod2
+gobipod123    1/1     Running   0          39m    run=gobipod123
+
+```
+
+
+
 
 

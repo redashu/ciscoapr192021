@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudep1
+  name: ashudep1 # name of deployment 
+spec:
+  replicas: 2 # by default no of pod we want 
+  selector:
+    matchLabels:
+      app: ashudep1
+  strategy: {}
+  template: # template by using this pods will be created
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashudep1
+    spec:
+      containers:
+      - image: dockerashu/ashuciscowebapp:v002 # docker image 
+        name: ashuciscowebapp # name of container 
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashusvc2
+  name: ashusvc2 # name of service 
+spec:
+  ports:
+  - name: 2233-80
+    port: 2233 # service port 
+    protocol: TCP
+    targetPort: 80 # pod applciation port 
+  selector: # to find label based pod 
+    app: ashudep1 # this is label of POD 
+  type: NodePort # type of service 
+status:
+  loadBalancer: {}

@@ -1,3 +1,4 @@
-# Training plan 
+# recap of day 1 & day 2
 
-<img src="plan.png">
+<img src="recap.png">
+

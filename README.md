@@ -157,6 +157,24 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service
 
 <img src="nodeadd.png">
 
+# POd communication 
+
+## creating a pod 
+###  refer aspod1.yml  
+
+```
+❯ kubectl  replace  -f aspod1.yaml --force
+pod "ashupod1" deleted
+pod/ashupod1 replaced
+❯ kubectl  get  pods
+NAME        READY   STATUS             RESTARTS   AGE
+anwepod1    0/1     CrashLoopBackOff   3          87s
+ashupod1    1/1     Running            0          7s
+
+```
+
+
+
 
 
 

@@ -417,10 +417,105 @@ default-token-4q5rh   kubernetes.io/service-account-token   3      132m
 
 ```
 
+# Storage in k8s
 
+<img src="st.png">
 
+## POD & volume story 
 
+<img src="podvol.png" alt="right">
+
+## empydir with pod 
+
+<img src="empvol.png">
+
+ ## testing alpine pod with empty dir
  
+ ```
+ ❯ kubectl  apply -f  storageemp.yml
+pod/ashupd11 created
+❯ kubectl  get  pods
+NAME       READY   STATUS    RESTARTS   AGE
+ashupd11   1/1     Running   0          7s
+❯ kubectl  exec -it  ashupd11  -- sh
+/ # 
+/ # cd  /mnt/
+/mnt # ls
+cisco
+/mnt # cd  cisco/
+/mnt/cisco # ls
+time.txt
+/mnt/cisco # cat  time.txt 
+Thu Apr 22 10:10:36 UTC 2021
+Thu Apr 22 10:10:39 UTC 2021
+Thu Apr 22 10:10:42 UTC 2021
+Thu Apr 22 10:10:45 UTC 
+
+```
+
+## helper container concept 
+
+<img src="helper.png">
+
+## multi container pod 
+
+<img src="multic.png">
+
+## connecting multple container with in same pod 
+
+```
+❯ kubectl  replace -f  storageemp.yml --force
+pod "ashupd11" deleted
+pod/ashupd11 replaced
+❯ kubectl  get  pods
+NAME       READY   STATUS    RESTARTS   AGE
+ashupd11   2/2     Running   0          10s
+❯ kubectl  exec -it  ashupd11  -c   ashupd11  -- sh
+/ # 
+/ # 
+/ # cd /mnt/cisco/
+/mnt/cisco # ls
+time.txt
+/mnt/cisco # 
+❯ kubectl  exec -it  ashupd11  -c  ashuc1  -- bash
+root@ashupd11:/# cd /usr/share/nginx/html/
+root@ashupd11:/usr/share/nginx/html# ls
+time.txt
+root@ashupd11:/usr/share/nginx/html# 
+
+```
+
+
+## checking container info 
+
+```
+❯ kubectl  describe pod ashupd11
+Name:         ashupd11
+Namespace:    ashuns
+Priority:     0
+Node:         ip-172-31-75-3.ec2.internal/172.31.75.3
+Start Time:   Thu, 22 Apr 2021 16:15:22 +0530
+Labels:       run=ashupd11
+Annotations:  cni.projectcalico.org/podIP: 192.168.40.176/32
+              cni.projectcalico.org/podIPs: 192.168.40.176/32
+Status:       Running
+IP:           192.168.40.176
+IPs:
+  IP:  192.168.40.176
+Containers:
+  ashuc1:
+    Container ID:   docker://e16285b2c55f9f87f4af8dbf84aaf685c687814b4194b62695e45c22c7e2d3b3
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:75a55d33ecc73c2a242450a9f1cc858499d468f077ea942867e662c247b5e412
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Thu, 22 Apr 2021 16:15:23 +0530
+    Ready:          True
+
+```
+
+
  
   
 

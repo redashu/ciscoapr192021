@@ -1,3 +1,4 @@
-# Training plan 
+# Quick revision of docker & kubernetes 
 
-<img src="plan.png">
+<img src="rev.png">
+

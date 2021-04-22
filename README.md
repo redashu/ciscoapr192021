@@ -515,7 +515,99 @@ Containers:
 
 ```
 
+# HostPAth volume 
 
- 
-  
+<img src="hostp.png">
+
+## creating deployment 
+
+```
+kubectl  create  deployment  dep1 --image=alpine  --dry-run=client  -o yaml >hostpathvol1.yml
+
+OR 
+kubectl  create  deployment  dep1 --image=alpine  --namespace ashuns --dry-run=client  -o yaml >hostpathvol1.yml
+
+```
+
+## deployment 
+
+```
+❯ kubectl  apply  -f  hostpathvol1.yml
+deployment.apps/dep1 created
+❯ kubectl  get  deploy,pod
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/dep1   1/1     1            1           16s
+
+NAME                       READY   STATUS    RESTARTS   AGE
+pod/dep1-c9ccd48cc-k5gfj   1/1     Running   0          16s
+❯ kubectl  exec -it  dep1-c9ccd48cc-k5gfj  -- sh
+/ # ls
+bin        etc        lib        mnt        opt        root       sbin       sys        usr
+dev        home       media      myetcdata  proc       run        srv        tmp        var
+/ # cd  myetcdata/
+/myetcdata # ls
+DIR_COLORS               default                  issue.net                passwd-                  services
+DIR_COLORS.256color      depmod.d                 krb5.conf                pkcs11                   sestatus.conf
+DIR_COLORS.lightbgcolor  dhcp                     krb5.conf.d              pki                      setuptool.d
+GREP_COLORS              docker                   kubernetes               plymouth                 shadow
+GeoIP.conf               docker-runtimes.d        ld.so.cache              pm                       shadow-
+GeoIP.conf.default       dracut.conf              ld.so.conf               popt.d                   shells
+NetworkManager           dracut.conf.d            ld.so.conf.d             postfix                  skel
+X11                      
+
+```
+
+## Deployment of portainer to monitor and manage docker based containers 
+
+```
+kubectl  create  deployment  webui  --image=portainer/portainer:latest  --namespace ashuns --dry-run=client -o yaml  >portainer.yml
+
+```
+
+### creating service 
+
+```
+❯ kubectl  get  deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+dep1    1/1     1            1           21m
+webui   1/1     1            1           31s
+❯ kubectl  expose  deployment  webui  --type NodePort --port 1234 --target-port 9000 --name svcc11
+service/svcc11 exposed
+❯ kubectl  get  svc
+NAME     TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+svcc11   NodePort   10.105.51.7   <none>        1234:32683/TCP   5s
+
+```
+
+
+## users in k8s 
+
+<img src="users.png">
+
+## default service account is attached to every namespace 
+
+```
+❯ kubectl   config  get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashuns
+          minikube                      minikube     minikube           default
+❯ kubectl  get  serviceaccount
+NAME      SECRETS   AGE
+default   1         5h58m
+❯ kubectl  get  sa
+NAME      SECRETS   AGE
+default   1         5h58m
+
+```
+
+## every service account has default password that got stored in the form of secret 
+
+```
+❯ kubectl  get  secret
+NAME                  TYPE                                  DATA   AGE
+ashusec1              kubernetes.io/dockerconfigjson        1      3h49m
+default-token-4q5rh   kubernetes.io/service-account-token   3      6h
+
+```
+
 

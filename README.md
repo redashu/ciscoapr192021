@@ -338,7 +338,44 @@ CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPAC
 ```
 
 
+## Python Flask webapplication deployment 
 
+### creating docker image  From GIthub 
+
+```
+ docker  build  -t  dockerashu/ciscoflask:v0011  https://github.com/redashu/flaskwebappnew.git\#main
+[+] Building 30.5s (6/7)                                                                                                                     
+ => [internal] load git source https://github.com/redashu/flaskwebappnew.git#main                                                       1.8s
+ => [internal] load metadata for docker.io/library/python:latest                                                                        3.7s 
+ => CACHED [1/5] FROM docker.io/library/python@sha256:07c51c65ab9c1a156a1fb51eff3ec04feff7b85b2acb7d6cc65148b218d67402                  0.0s 
+ => [2/5] RUN mkdir  /webapps                                                                                                           1.7s 
+ => [3/5] COPY  Flaskex  /webapps/                                                                                                      0.1s 
+ => [4/5] WORKDIR /webapps                                                                                                              0.1s
+ => [5/5] RUN pip3 install -r  requirements.txt                                                                                        22.9s
+ => => # Successfully built flask-heroku gunicorn                                                                                           
+ => => # Installing collected packages: MarkupSafe, Werkzeug, pycparser, Jinja2, itsdangerous, click, urllib3, six, idna, greenlet, Flask, c
+ => => # hardet, cffi, certifi, WTForms, SQLAlchemy, requests, gunicorn, flask-heroku, bcrypt                                               
+ => => # Successfully installed Flask-1.1.2 Jinja2-2.11.3 MarkupSafe-1.1.1 SQLAlchemy-1.4.11 WTForms-2.3.3 Werkzeug-1.0.1 bcrypt-3.2.0 certi
+ => => # fi-2020.12.5 cffi-1.14.5 chardet-4.0.0 click-7.1.2 flask-heroku-0.1.9 greenlet-1.0.0 gunicorn-20.1.0 idna-2.10 itsdangerous-1.1.0 p
+ => => # ycparser-2.20 requests-2.25.1 si
+ 
+ ```
+ 
+ ## now deployment of above image 
+ 
+ ```
+ kubectl  create  deployment   ashuflaskapp  --image=dockerashu/ciscoflask:v0011  --dry-run=client -o yaml  >flaskapp.yml
+ 
+ kubectl   create  service   loadbalancer   ashusvc1  --tcp  1234:5000  --dry-run=client  -o yaml  >>flaskapp.yml
+ 
+ ```
+ 
+ ## understanding above yaml 
+ 
+ <img src="flaskapp.png">
+ 
+ 
+ 
 
 
 

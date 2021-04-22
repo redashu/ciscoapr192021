@@ -375,7 +375,48 @@ CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPAC
  <img src="flaskapp.png">
  
  
+ # Deployimage app from ACR (azure container registry)
  
+ ## pushing image to ACR 
+ 
+ ```
+ ❯ docker  tag   aa:v1    ciscoashu.azurecr.io/cisco:flasv1
+❯ docker login   ciscoashu.azurecr.io
+Username: ciscoashu
+Password: 
+Login Succeeded
+❯ docker  push ciscoashu.azurecr.io/cisco:flasv1
+The push refers to repository [ciscoashu.azurecr.io/cisco]
+f48550cce7b9: Pushing [==>                                                ]   1.45MB/33.82MB
+5f70bf18a086: Pushing  1.024kB
+dbbc3acd9ce6: Pushing [==================================================>]  663.6kB
+10e45f05b050: Pushing  8.704kB
+
+
+```
+
+## problem with image registry other than docker hub 
+
+<img src="acr.png">
+
+## understanding secret 
+
+<img src="sec.png">
+
+## creating secret 
+
+```
+ kubectl   create  secret  docker-registry  ashusec1  --docker-server=ciscoashu.azurecr.io   --docker-username=ciscoashu  --docker-password=Juws3H/bbUJvFP8YNWk   -n ashuns 
+❯ 
+❯ 
+❯ 
+❯ kubectl   get  secret
+NAME                  TYPE                                  DATA   AGE
+ashusec1              kubernetes.io/dockerconfigjson        1      56s
+default-token-4q5rh   kubernetes.io/service-account-token   3      132m
+
+```
+
 
 
 

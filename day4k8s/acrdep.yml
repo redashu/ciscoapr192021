@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ashuns  # namespace info 
+  creationTimestamp: null
+  labels:
+    app: alpdep
+  name: alpdep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpdep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: alpdep
+    spec:
+      imagePullSecrets: 
+      - name: ashusec1 # name of secret 
+      containers:
+      - image: ciscoashu.azurecr.io/alp:v1
+        name: alp
+        command: ["/bin/sh","-c","ping google.com"]
+        resources: {}
+status: {}

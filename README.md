@@ -160,6 +160,11 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service
 # POd communication 
 
 ## creating a pod 
+
+```
+ kubectl  run  ashupod1  --image=alpine  --dry-run=client -o yaml  >aspod1.yaml
+```
+
 ###  refer aspod1.yml  
 
 ```
@@ -171,6 +176,165 @@ NAME        READY   STATUS             RESTARTS   AGE
 anwepod1    0/1     CrashLoopBackOff   3          87s
 ashupod1    1/1     Running            0          7s
 
+```
+
+
+### login into pod 
+
+```
+❯ kubectl   exec  -it  ashupod1  -- sh
+/ # cat  /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.13.5
+PRETTY_NAME="Alpine Linux v3.13"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr EA:AE:52:1D:21:E8  
+          inet addr:192.168.229.152  Bcast:192.168.229.152  Mask:255.255.255.255
+          UP BROADCAST RUNNING MULTICAST  MTU:8981  Metric:1
+          RX packets:262 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:257 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:24792 (24.2 KiB)  TX bytes:
+	 
+```
+
+## checking output by POd 
+
+```
+kubectl   logs  ashupod1  
+10076  kubectl   logs -f  ashupod1  
+
+```
+
+### history for pod communication and check 
+
+```
+10056  kubectl  run  ashupod1  --image=alpine  --dry-run=client -o yaml  >aspod1.yaml
+10057  ls
+10058  kubectl  apply  -f   aspod1.yaml 
+10059  kubectl  get  pods
+10060  history
+10061  kubectl  get  pods
+10062  kubectl  replace  -f aspod1.yaml --force 
+10063  kubectl  get  pods
+10064  hsitor
+10065  history
+10066  kubectl  get  pods
+10067  kubectl  get  pods -o wide 
+10068  kubectl   exec  -it  ashupod1  -- sh 
+10069  history
+10070  kubectl  get  po 
+10071  kubectl  delete  pod  swpod1  
+10072  kubectl  get  po 
+10073  kubectl  get  po  swpod1  -o yaml 
+10074  kubectl   get  po 
+10075  kubectl   logs  ashupod1  
+10076  kubectl   logs -f  ashupod1  
+
+```
+
+## deleting all the pods 
+
+```
+❯ kubectl  delete pods --all
+pod "anwepod1" deleted
+pod "ashupod1" deleted
+pod "devapod1" deleted
+pod "geepod1" deleted
+pod "gobipod1" deleted
+pod "nehitha" deleted
+
+```
+
+# namespace in k8s
+
+<img src="ns.png">
+
+## ALL pods , svc , deployment and rest all thing will be deployment in "Default". namespace
+
+<img src="dns.png">
+
+## kube-system namespace
+
+<img src="kubesp.png">
+
+## checking pods in kube-system 
+
+```
+❯ kubectl   get   pods   -n  kube-system
+NAME                                                    READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-6d8ccdbf46-v4ft6                1/1     Running   4          4d14h
+calico-node-59clh                                       1/1     Running   4          4d14h
+calico-node-dzczk                                       1/1     Running   4          4d14h
+calico-node-f9qxw                                       1/1     Running   4          4d14h
+calico-node-fpq7p                                       1/1     Running   0          59m
+coredns-558bd4d5db-lt86z                                1/1     Running   4          4d14h
+coredns-558bd4d5db-w27hb                                1/1     Running   4          4d14h
+etcd-ip-172-31-69-220.ec2.internal                      1/1     Running   4          4d14h
+kube-apiserver-ip-172-31-69-220.ec2.internal            1/1     Running   4          4d14h
+kube-controller-manager-ip-172-31-69-220.ec2.internal   1/1     Running   4          4d14h
+kube-proxy-6h2wc                                        1/1     Running   4          4d14h
+kube-proxy-88r5m                                        1/1     Running   0          59m
+kube-proxy-cwx99                                        1/1     Running   4          4d14h
+kube-proxy-qx9np                                        1/1     Running   4          4d14h
+kube-scheduler-ip-172-31-69-220.ec2.internal            1/1     Running   4          4d14h
+
+```
+
+## creating custom namespace 
+
+```
+❯ kubectl   create  namespace    ashuns
+Error from server (AlreadyExists): namespaces "ashuns" already exists
+❯ 
+❯ 
+❯ kubectl   get  ns
+NAME              STATUS   AGE
+ashuns            Active   27s
+default           Active   4d14h
+devans            Active   12s
+gobins            Active   20s
+kube-node-lease   Active   4d14h
+kube-public       Active   4d14h
+kube-system       Active   4d14h
+nehithans         Active   24s
+sains             Active   14s
+srirns            Active   16s
+
+```
+
+## Deploy pod in personal namespace 
+
+```
+❯ kubectl  apply  -f  aspod1.yaml
+pod/ashupod1 created
+❯ kubectl  get  pods
+NAME     READY   STATUS    RESTARTS   AGE
+swpod1   1/1     Running   0          37m
+❯ kubectl  get  pods  -n ashuns
+NAME       READY   STATUS    RESTARTS   AGE
+ashupod1   1/1     Running   0          15s
+
+░▒▓ ~/Desktop/mydocker/day4k8
+
+```
+
+## setting default namespace 
+
+```
+❯  kubectl   config set-context  --current  --namespace=ashuns
+Context "kubernetes-admin@kubernetes" modified.
+❯ 
+❯ 
+❯ kubectl  get   pods
+NAME       READY   STATUS    RESTARTS   AGE
+ashupod1   1/1     Running   0          2m22s
+❯ kubectl   config get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashuns
 ```
 
 

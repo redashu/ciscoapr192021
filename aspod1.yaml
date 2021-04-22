@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  namespace: ashuns  # namespace info 
   creationTimestamp: null
   labels: # label of POd 
     run: ashupod1 # run is key & ashupod1 is a value 

@@ -212,6 +212,20 @@ ashuwebsvc   NodePort    10.102.8.241    <none>        1234:31848/TCP   22s
 
 ```
 
+## cloud managed k8s 
+
+<img src="clk8s.png">
+
+# Introduction to helm 
+
+<img src="helm.png">
+
+## isntalling. helm on client side
+
+<img src="helmins.png">
+
+
+
 
 
 

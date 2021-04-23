@@ -1,3 +1,4 @@
-# Training plan 
+# Revision 
 
-<img src="plan.png">
+<img src="k8sdep.png">
+

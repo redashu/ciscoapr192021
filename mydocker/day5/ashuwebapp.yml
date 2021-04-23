@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ashuns # namespace 
+  creationTimestamp: null
+  labels:
+    app: ashuwebapp
+  name: ashuwebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashuwebapp
+  strategy: {}
+  template: # templates section 
+    metadata:
+      creationTimestamp: null
+      labels: # labels of pod 
+        app: ashuwebapp
+    spec:
+      containers:
+      - image: wordpress:4.8-apache # webapp docker image from docker hub
+        name: wordpress # name of container 
+        env: 
+        - name: WORDPRESS_DB_HOST # database host / ip address
+          value: ashudbsvc1 # service name of DB pod 
+        - name: WORDPRESS_DB_PASSWORD # to connect DB password will be reading from
+          valueFrom: # secret
+           secretKeyRef:
+            name: ashudbsec1
+            key: key1 
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ashuns # namespace info 
+  creationTimestamp: null
+  labels:
+    app: ashuwebsvc
+  name: ashuwebsvc # service name 
+spec:
+  ports:
+  - name: 1234-80
+    port: 1234
+    protocol: TCP
+    targetPort: 80
+  selector: # we have match the label of pod 
+    app: ashuwebapp # you can check label of pod from deployment section
+  type: NodePort # type of service 
+status:
+  loadBalancer: {}

@@ -172,5 +172,46 @@ mysql>
 
 ```
 
+## Creating webapplication deployment 
+
+```
+ kubectl  create  deployment  ashuwebapp  --image=wordpress:4.8-apache --dry-run=client -o yaml  >ashuwebapp.yml
+ 
+```
+
+
+## understanding DB connection from wordpress pod 
+
+<img src="dbconn.png">
+
+## creating service that can expose webapps
+
+```
+kubectl  create  service  nodeport  ashuwebsvc   --tcp  1234:80   --dry-run=client -o yaml  >>ashuwebapp.yml
+
+```
+
+## deployment of web app
+
+```
+❯ kubectl  apply -f  ashuwebapp.yml
+deployment.apps/ashuwebapp created
+service/ashuwebsvc created
+❯ kubectl  get  deploy
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ashudb       1/1     1            1           146m
+ashuwebapp   1/1     1            1           8s
+❯ kubectl  get  pod
+NAME                          READY   STATUS    RESTARTS   AGE
+ashudb-68f77b6865-zr8gj       1/1     Running   0          146m
+ashuwebapp-76545595c9-fq2cn   1/1     Running   0          17s
+❯ kubectl  get  svc
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+ashudbsvc1   ClusterIP   10.104.61.183   <none>        3306/TCP         147m
+ashuwebsvc   NodePort    10.102.8.241    <none>        1234:31848/TCP   22s
+
+```
+
+
 
 

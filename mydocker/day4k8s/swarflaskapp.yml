@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: swarsvc1
+  name: swarsvc1
+spec:
+  ports:
+  - name: 1234-5000
+    port: 1234
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: swarsvc1
+  type: LoadBalancer
+status:
+  loadBalancer: {}

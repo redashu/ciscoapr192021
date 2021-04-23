@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ashuns # namespace information 
+  creationTimestamp: null
+  labels:
+    app: ashudb
+  name: ashudb # my database deployment name 
+spec:
+  replicas: 1 # no of db pod 
+  selector:
+    matchLabels:
+      app1: ashudb1
+  strategy: {}
+  template: # deployment will use template section to create db PODs 
+    metadata:
+      creationTimestamp: null
+      labels: # label of PODs 
+        app1: ashudb1  # app1 is key & ashudb1 is value 
+    spec:
+      volumes:
+      - name: ashudbvol1  # name of volume 
+        nfs: # volume type is NFS 
+         server: 172.31.71.211 # NFS remote storage server IP
+         path: /data/ashu # location on NFS server to store DB data 
+      containers:
+      - image: mysql:5.6 # docker image from docker hub 
+        name: ashudbc1 # name of container 
+        env:  # to create / update env variable data 
+        - name: MYSQL_ROOT_PASSWORD # env var to set mysql root user password
+          valueFrom: # fetching value from somewhere 
+           secretKeyRef: # secret ref
+            name: ashudbsec1 # name of secret 
+            key: key1 # key of secret 
+        volumeMounts: # mounting above created volume 
+        - name: ashudbvol1 # name of volume 
+          mountPath: /var/lib/mysql/ # location of mysql DB to store database
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ashuns # namespace info 
+  creationTimestamp: null
+  labels:
+    app: ashudbsvc1
+  name: ashudbsvc1
+spec:
+  ports:
+  - name: "3306"
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector: # here we need to match label of POD 
+   app1: ashudb1 # label of POD 
+  type: ClusterIP # type of service 
+status:
+  loadBalancer: {}

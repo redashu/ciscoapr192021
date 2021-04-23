@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: ashuns  # namespace info 
+  creationTimestamp: null
+  labels: # label of POd 
+    run: ashupod1 # run is key & ashupod1 is a value 
+  name: ashupod1 # name of the POD 
+spec:
+  containers:
+  - image: alpine # docker image from docker hub 
+    name: ashupod1 # name of container 
+    command: ["/bin/sh","-c","ping 8.8.8.8"] # Entrypoint replacement
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

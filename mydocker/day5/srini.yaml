@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: srirns                   # namespace info
+  creationTimestamp: null
+  labels:
+    app: srirdb
+  name: srirdb                        # DB name
+spec:
+  replicas: 1                         # no of db pod
+  selector:
+    matchLabels:
+      app1: srirdb1
+  strategy: {}
+  template:                           # deployment will use template section to create db pods
+    metadata:
+      creationTimestamp: null
+      labels:                         # labels of PODs
+        app1: srirdb1                 # app1 is key and 
+    spec:
+      volumes:
+      - name: srirdbvol1              # Volume Name
+        nfs:                          # type NFS
+          server: 172.31.71.211    #172.31.71.211   # NFS REMOTE IP
+          path: /data/srini           # LOC ON NFS TO STORE DB
+      containers:
+      - image: mysql:5.6              # DOC IMAGE FROM DOCR HUB
+        name: srirdbc1                # name of the container
+        env:                          # ENV for DB
+        - name: MYSQL_ROOT_PASSWORD   # ENV VAR FOR ROOT USER
+          valueFrom:
+            secretKeyRef:             # Sec ref
+              name: srirdbsec1        # name of sec
+              key: key1               # Key of secret
+        volumeMounts:                 # mountign above 
+        - name: srirdbvol1            # Volume Name
+          mountPath: /var/lib/mysql/  # loc of DB on datastore
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: srirns
+  creationTimestamp: null
+  labels:
+    app: srirdbsvc1
+  name: srirdbsvc1
+spec:
+  ports:
+  - name: "3306"
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:                           # march the 
+    app1: srirdb1                    # label of the POD
+  type: ClusterIP                     # type of service
+status:
+  loadBalancer: {}

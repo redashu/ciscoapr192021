@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ashuns # namespace info 
+  creationTimestamp: null
+  labels: # label of deployment 
+    app: ashuflaskapp
+  name: ashuflaskapp # name of deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashuflaskapp
+  strategy: {}
+  template: # deployment use template to create POD 
+    metadata:
+      creationTimestamp: null
+      labels: 
+        app: ashuflaskapp
+    spec:
+      containers:
+      - image: dockerashu/cisco:flaskv1
+        name: ciscoflask
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ashuns # namespace info 
+  creationTimestamp: null
+  labels:
+    app: ashusvc1
+  name: ashusvc1 # name of service 
+spec:
+  ports:
+  - name: 1234-5000
+    port: 1234 # serivce ip port 
+    protocol: TCP
+    targetPort: 5000 # flask app port 
+  selector: # find pods using below lable 
+    app: ashuflaskapp # label of POD 
+  type: LoadBalancer # type of service 
+status:
+  loadBalancer: {}

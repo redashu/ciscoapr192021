@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: dep1
+  name: dep1
+  namespace: ashuns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dep1
+  strategy: {}
+  template: # template section 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: dep1
+    spec:
+      nodeName: ip-172-31-75-3.ec2.internal # static scheduling 
+      volumes: #  creating volume 
+      - name: ashuvol2 # name of the volume 
+        hostPath: # from minion node 
+         path: /etc/ # use this folder 
+      containers:
+      - image: alpine
+        name: alpine
+        volumeMounts:
+        - name: ashuvol2
+          mountPath: /myetcdata/ # here all /etc data will be mounted
+          readOnly: True # in readonly mode 
+        command: ["/bin/sh","-c","sleep 36000"]
+        resources: {}
+status: {}
